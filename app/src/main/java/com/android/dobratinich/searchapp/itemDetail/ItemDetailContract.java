@@ -14,7 +14,7 @@ public interface ItemDetailContract {
 
         void showItemDescription(String description);
 
-        void showError(String error);
+        void showError(String error, String errorCode);
     }
 
     interface Presenter {
@@ -26,7 +26,7 @@ public interface ItemDetailContract {
 
         void showItemDescription(String description);
 
-        void showError(String error);
+        void showError(String error, String errorCode);
 
         void searchItemPictures(String id);
 

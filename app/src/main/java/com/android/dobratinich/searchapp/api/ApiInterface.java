@@ -26,8 +26,4 @@ public interface ApiInterface {
             @Path("id") String id
     );
 
-    /*@GET("sites/MLA/autosuggest")
-    Call<SuggestionResponse> getSuggestion(
-            @Query("q") String query
-    );*/
 }

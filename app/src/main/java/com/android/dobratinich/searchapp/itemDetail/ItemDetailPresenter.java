@@ -35,8 +35,8 @@ public class ItemDetailPresenter implements ItemDetailContract.Presenter {
     }
 
     @Override
-    public void showError(String error) {
-        mView.showError(error);
+    public void showError(String error, String errorCode) {
+        mView.showError(error, errorCode);
     }
 
     @Override

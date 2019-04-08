@@ -6,12 +6,15 @@ public interface SearchContract {
 
     interface View {
         void showSearchResult(SearchItem searchItems);
-        void showError(String error);
+
+        void showError(String error, String errorCode);
     }
 
     interface Presenter {
-        void showError(String error);
+        void showError(String error, String errorCode);
+
         void showSearchResult(SearchItem searchItems);
+
         void searchItems(String keyword);
     }
 

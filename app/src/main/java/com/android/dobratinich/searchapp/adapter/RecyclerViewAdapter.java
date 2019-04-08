@@ -42,6 +42,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         Picasso.get()
                 .load(itemModel.getThumbnail())
+                .placeholder(R.drawable.searching)
                 .fit()
                 .centerInside()
                 .into(holder.imageView);

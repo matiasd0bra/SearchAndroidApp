@@ -14,6 +14,10 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.dobratinich.searchapp.adapter.RecyclerViewAdapter;
@@ -27,11 +31,13 @@ public class SearchActivity extends AppCompatActivity implements SearchContract.
     private SearchPresenter mPresenter;
     private RecyclerView mRecyclerView;
     private RecyclerView.LayoutManager mLayoutManager;
-    private SearchItem mItemList = new SearchItem();
+    private SearchItem mItemList;
     private RecyclerViewAdapter mAdapter;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private String mLastSearch;
-    private String TAG = SearchActivity.class.getSimpleName();
+    private RelativeLayout errorLayout;
+    private TextView errorTitle, errorDescription;
+    private Button errorBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +45,7 @@ public class SearchActivity extends AppCompatActivity implements SearchContract.
         setContentView(R.layout.activity_search);
         mPresenter = new SearchPresenter(this);
         initLayout();
+        initErrorLayout();
     }
 
     private void initLayout() {
@@ -67,6 +74,7 @@ public class SearchActivity extends AppCompatActivity implements SearchContract.
             public boolean onQueryTextSubmit(String query) {
                 if (query.length() > 0) {
                     mLastSearch = query;
+                    mSwipeRefreshLayout.setRefreshing(true);
                     onLoadingSwipeRefresh(query);
                 }
                 return false;
@@ -90,6 +98,7 @@ public class SearchActivity extends AppCompatActivity implements SearchContract.
     }
 
     private void onLoadingSwipeRefresh(final String keyword) {
+        errorLayout.setVisibility(View.GONE);
         mSwipeRefreshLayout.post(
                 new Runnable() {
                     @Override
@@ -102,6 +111,8 @@ public class SearchActivity extends AppCompatActivity implements SearchContract.
 
     @Override
     public void showSearchResult(SearchItem searchItems) {
+        mSwipeRefreshLayout.setRefreshing(false);
+        mItemList = searchItems;
         mAdapter = new RecyclerViewAdapter(searchItems.getResults(), SearchActivity.this);
         mRecyclerView.setAdapter(mAdapter);
         mAdapter.notifyDataSetChanged();
@@ -121,7 +132,24 @@ public class SearchActivity extends AppCompatActivity implements SearchContract.
     }
 
     @Override
-    public void showError(String error) {
-        Toast.makeText(this, error, Toast.LENGTH_SHORT).show();
+    public void showError(String error, String errorCode) {
+        if (errorLayout.getVisibility() == View.GONE) {
+            errorLayout.setVisibility(View.VISIBLE);
+        }
+        errorTitle.setText(error);
+        errorDescription.setText(errorCode);
+    }
+
+    private void initErrorLayout() {
+        errorLayout = findViewById(R.id.error_layout);
+        errorTitle = findViewById(R.id.error_title);
+        errorDescription = findViewById(R.id.error_desc);
+        errorBtn = findViewById(R.id.error_btn);
+        errorBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onRefresh();
+            }
+        });
     }
 }
