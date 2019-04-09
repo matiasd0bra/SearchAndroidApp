@@ -10,15 +10,14 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.dobratinich.searchapp.adapter.RecyclerViewAdapter;
 import com.android.dobratinich.searchapp.domain.Item;
@@ -35,16 +34,14 @@ public class SearchActivity extends AppCompatActivity implements SearchContract.
     private RecyclerViewAdapter mAdapter;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private String mLastSearch;
-    private RelativeLayout errorLayout;
-    private TextView errorTitle, errorDescription;
-    private Button errorBtn;
-    private Context context;
+    private RelativeLayout mErrorLayout;
+    private TextView mErrorTitle, mErrorDescription;
+    private Button mErrorBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
-        context = getApplicationContext();
         mPresenter = new SearchPresenter(this);
         initLayout();
         initErrorLayout();
@@ -70,11 +67,11 @@ public class SearchActivity extends AppCompatActivity implements SearchContract.
         final SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
         MenuItem searchMenuItem = menu.findItem(R.id.action_search);
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-        searchView.setQueryHint(context.getString(R.string.query_hint));
+        searchView.setQueryHint(getApplicationContext().getString(R.string.query_hint));
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                if (query.length() > 0) {
+                if (!TextUtils.isEmpty(query)) {
                     mLastSearch = query;
                     mSwipeRefreshLayout.setRefreshing(true);
                     onLoadingSwipeRefresh(query);
@@ -94,13 +91,13 @@ public class SearchActivity extends AppCompatActivity implements SearchContract.
 
     @Override
     public void onRefresh() {
-        if (mLastSearch != null && !mLastSearch.isEmpty()) {
+        if (!TextUtils.isEmpty(mLastSearch)) {
             onLoadingSwipeRefresh(mLastSearch);
         }
     }
 
     private void onLoadingSwipeRefresh(final String keyword) {
-        errorLayout.setVisibility(View.GONE);
+        mErrorLayout.setVisibility(View.GONE);
         mSwipeRefreshLayout.post(
                 new Runnable() {
                     @Override
@@ -135,19 +132,19 @@ public class SearchActivity extends AppCompatActivity implements SearchContract.
 
     @Override
     public void showError(String error, String errorCode) {
-        if (errorLayout.getVisibility() == View.GONE) {
-            errorLayout.setVisibility(View.VISIBLE);
+        if (mErrorLayout.getVisibility() == View.GONE) {
+            mErrorLayout.setVisibility(View.VISIBLE);
         }
-        errorTitle.setText(error);
-        errorDescription.setText(errorCode);
+        mErrorTitle.setText(error);
+        mErrorDescription.setText(errorCode);
     }
 
     private void initErrorLayout() {
-        errorLayout = findViewById(R.id.error_layout);
-        errorTitle = findViewById(R.id.error_title);
-        errorDescription = findViewById(R.id.error_desc);
-        errorBtn = findViewById(R.id.error_btn);
-        errorBtn.setOnClickListener(new View.OnClickListener() {
+        mErrorLayout = findViewById(R.id.error_layout);
+        mErrorTitle = findViewById(R.id.error_title);
+        mErrorDescription = findViewById(R.id.error_desc);
+        mErrorBtn = findViewById(R.id.error_btn);
+        mErrorBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onRefresh();

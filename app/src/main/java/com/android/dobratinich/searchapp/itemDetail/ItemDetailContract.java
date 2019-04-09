@@ -1,6 +1,5 @@
 package com.android.dobratinich.searchapp.itemDetail;
 
-import com.android.dobratinich.searchapp.domain.Description;
 import com.android.dobratinich.searchapp.domain.Item;
 
 import java.util.List;

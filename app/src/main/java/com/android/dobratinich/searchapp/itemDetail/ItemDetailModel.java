@@ -16,20 +16,20 @@ import retrofit2.Response;
 public class ItemDetailModel implements ItemDetailContract.Model {
 
     private ItemDetailContract.Presenter mPresenter;
-    private ApiInterface apiInterface;
+    private ApiInterface mApiInterface;
     private Item mItem;
 
 
     public ItemDetailModel(ItemDetailContract.Presenter presenter) {
         mPresenter = presenter;
-        apiInterface = ApiClient.getApiClient().create(ApiInterface.class);
+        mApiInterface = ApiClient.getApiClient().create(ApiInterface.class);
     }
 
     @Override
     public void searchItemById(String id) {
         if (mItem == null || mItem.getId() != id) {
             Call<Item> call;
-            call = apiInterface.getItem(id);
+            call = mApiInterface.getItem(id);
             call.enqueue(new Callback<Item>() {
                 @Override
                 public void onResponse(Call<Item> call, Response<Item> response) {
@@ -56,7 +56,7 @@ public class ItemDetailModel implements ItemDetailContract.Model {
     public void searchItemPictures(String id) {
         if (mItem == null || mItem.getId() != id) {
             Call<Item> call;
-            call = apiInterface.getItem(id);
+            call = mApiInterface.getItem(id);
 
             call.enqueue(new Callback<Item>() {
                 @Override
@@ -82,7 +82,7 @@ public class ItemDetailModel implements ItemDetailContract.Model {
     @Override
     public void searchItemDescription(String id) {
         Call<Description> call;
-        call = apiInterface.getItemDescription(id);
+        call = mApiInterface.getItemDescription(id);
 
         call.enqueue(new Callback<Description>() {
             @Override

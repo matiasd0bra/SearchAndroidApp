@@ -26,16 +26,20 @@ public class SearchModel implements SearchContract.Model {
             @Override
             public void onResponse(Call<SearchItem> call, Response<SearchItem> response) {
                 if (response.isSuccessful() && response.body().getResults() != null) {
-                    if (mItemList != null &&
-                            mItemList.getResults() != null && !mItemList.getResults().isEmpty()) {
-                        mItemList.getResults().clear();
+                    if (!response.body().getResults().isEmpty()) {
+                        if (mItemList != null &&
+                                mItemList.getResults() != null && !mItemList.getResults().isEmpty()) {
+                            mItemList.getResults().clear();
+                        }
+                        mItemList = response.body();
+                        mPresenter.showSearchResult(mItemList);
+                    } else {
+                        mPresenter.showError("No encontramos publicaciones", "Revisa que la palabra esté bien escrita.");
                     }
-                    mItemList = response.body();
-                    mPresenter.showSearchResult(mItemList);
                 } else {
                     switch (response.code()) {
                         case 404:
-                            mPresenter.showError("No se encontraron resultados", "Intente nuevamente - Error 404");
+                            mPresenter.showError("No encontramos resultados", "Intente nuevamente - Error 404");
                             break;
                         case 500:
                             mPresenter.showError("No se pudo conectar al Servidor", "Intente nuevamente - Error 500");
@@ -48,7 +52,7 @@ public class SearchModel implements SearchContract.Model {
 
             @Override
             public void onFailure(Call<SearchItem> call, Throwable t) {
-                mPresenter.showError("No se encontraron resultados", "Intente nuevamente");
+                mPresenter.showError("No encontramos publicaciones", "Intente nuevamente");
             }
         });
     }

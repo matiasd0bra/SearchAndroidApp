@@ -6,10 +6,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.dobratinich.searchapp.R;
 import com.android.dobratinich.searchapp.adapter.ViewPagerAdapter;
@@ -23,9 +21,9 @@ public class ItemDetailActivity extends AppCompatActivity implements ItemDetailC
     private ViewPager mItemImage;
     private TextView mTitle, mPrice, mDescription;
     private String mId;
-    private RelativeLayout errorLayout;
-    private TextView errorTitle, errorDescription;
-    private Button errorBtn;
+    private RelativeLayout mErrorLayout;
+    private TextView mErrorTitle, mErrorDescription;
+    private Button mErrorBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +42,7 @@ public class ItemDetailActivity extends AppCompatActivity implements ItemDetailC
         Intent intent = getIntent();
         mId = intent.getStringExtra("id");
 
-        errorLayout.setVisibility(View.GONE);
+        mErrorLayout.setVisibility(View.GONE);
         mPresenter.searchItemById(mId);
         mPresenter.searchItemDescription(mId);
         mPresenter.searchItemPictures(mId);
@@ -71,19 +69,19 @@ public class ItemDetailActivity extends AppCompatActivity implements ItemDetailC
 
     @Override
     public void showError(String error, String errorCode) {
-        if (errorLayout.getVisibility() == View.GONE) {
-            errorLayout.setVisibility(View.VISIBLE);
+        if (mErrorLayout.getVisibility() == View.GONE) {
+            mErrorLayout.setVisibility(View.VISIBLE);
         }
-        errorTitle.setText(error);
-        errorDescription.setText(errorCode);
+        mErrorTitle.setText(error);
+        mErrorDescription.setText(errorCode);
     }
 
     private void initErrorLayout() {
-        errorLayout = findViewById(R.id.error_layout);
-        errorTitle = findViewById(R.id.error_title);
-        errorDescription = findViewById(R.id.error_desc);
-        errorBtn = findViewById(R.id.error_btn);
-        errorBtn.setOnClickListener(new View.OnClickListener() {
+        mErrorLayout = findViewById(R.id.error_layout);
+        mErrorTitle = findViewById(R.id.error_title);
+        mErrorDescription = findViewById(R.id.error_desc);
+        mErrorBtn = findViewById(R.id.error_btn);
+        mErrorBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 retriveItemDetail();
