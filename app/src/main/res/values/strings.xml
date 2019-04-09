@@ -1,3 +1,13 @@
 <resources>
-    <string name="app_name">SearchApp</string>
+    <string name="app_name">Busqueda de productos</string>
+
+    <!--Search hint-->
+    <string name="query_hint">Que deseas buscar?</string>
+
+    <!--Item detail-->
+    <string name="description">Descripcion</string>
+
+    <!--Error Layout-->
+    <string name="error_button">Reintentar</string>
+
 </resources>

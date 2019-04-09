@@ -43,7 +43,7 @@ public class ItemDetailModel implements ItemDetailContract.Model {
 
                 @Override
                 public void onFailure(Call<Item> call, Throwable t) {
-                    mPresenter.showError("No se encontro el item", "Intente nuevamente");
+                    sendError(0);
                 }
             });
         }

@@ -38,11 +38,13 @@ public class SearchActivity extends AppCompatActivity implements SearchContract.
     private RelativeLayout errorLayout;
     private TextView errorTitle, errorDescription;
     private Button errorBtn;
+    private Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
+        context = getApplicationContext();
         mPresenter = new SearchPresenter(this);
         initLayout();
         initErrorLayout();
@@ -68,7 +70,7 @@ public class SearchActivity extends AppCompatActivity implements SearchContract.
         final SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
         MenuItem searchMenuItem = menu.findItem(R.id.action_search);
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-        searchView.setQueryHint("Que deseas buscar?");
+        searchView.setQueryHint(context.getString(R.string.query_hint));
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
